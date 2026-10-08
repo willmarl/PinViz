@@ -1,0 +1,11 @@
+title: "ESP32-C2 — LED on GPIO8"
+board: esp32_c2_devkitm1
+layout: schematic
+show_legend: true
+devices:
+  - type: led
+    name: LED1
+    color: blue
+connections:
+  - { board_pin: 16, device: LED1, device_pin: "+", color: "#3B82F6" }
+  - { board_pin: 2, device: LED1, device_pin: "-", color: "#1A1A1A" }

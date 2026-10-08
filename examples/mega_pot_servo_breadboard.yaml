@@ -1,0 +1,31 @@
+title: "Mega pot+servo smart rails"
+board: arduino_mega_2560
+layout: breadboard
+show_legend: true
+devices:
+  - type: breadboard_rail
+    name: Rails
+    breadboard: { role: rail }
+  - type: potentiometer
+    name: Pot
+    breadboard: { role: module, row: 3 }
+  - type: sg90
+    name: Servo
+    breadboard: { role: module, row: 9 }
+connections:
+  - { board_pin_role: "5V", device: Rails, device_pin: "+5V", color: "#D31212" }
+  - { board_pin_role: "GND", device: Rails, device_pin: "GND", color: "#1A1A1A" }
+  - from: { device: Rails, device_pin: "+5V" }
+    to: { device: Pot, device_pin: VCC }
+    color: "#D31212"
+  - from: { device: Rails, device_pin: GND }
+    to: { device: Pot, device_pin: GND }
+    color: "#1A1A1A"
+  - { board_pin: 9, device: Pot, device_pin: WIPER, color: "#E2B000" }
+  - from: { device: Rails, device_pin: "+5V" }
+    to: { device: Servo, device_pin: VCC }
+    color: "#D31212"
+  - from: { device: Rails, device_pin: GND }
+    to: { device: Servo, device_pin: GND }
+    color: "#1A1A1A"
+  - { board_pin: 33, device: Servo, device_pin: Signal, color: "#1F9D55" }

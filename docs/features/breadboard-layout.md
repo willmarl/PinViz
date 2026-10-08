@@ -1,8 +1,9 @@
 # Breadboard Layout
 
 !!! warning "Experimental"
-    The breadboard layout currently draws a **TMC2209 stepstick on a Raspberry Pi 4 or 5**. Other
-    boards and module types fail with an error. The schematic layout is unchanged and remains the default.
+    The breadboard layout draws **TMC2209 stepsticks** and compact **breakouts** (`potentiometer`,
+    `sg90`, `led`, `button`) beside dual-column board artwork (Pi, Arduino Mega/Uno/Nano, …).
+    Other module types still fail with an error. InvBot always forces `layout: breadboard`.
 
 ## Overview
 
@@ -42,6 +43,10 @@ Dark theme (`theme: dark`) is supported too: see `docs/assets/breadboard/three-m
 | Type | Default role | Notes |
 | ---- | ------------ | ----- |
 | `tmc2209` | `module` | 16-pin stepstick straddling the trench (BIGTREETECH V1.3 pin order) |
+| `potentiometer` / `pot` | `module` | 3-pin breakout on the left of the trench |
+| `sg90` | `module` | Micro-servo breakout (VCC / GND / Signal) |
+| `led` | `module` | 2-pin breakout (`+` / `-`) |
+| `button` | `module` | 2-pin breakout (`SIG` / `GND`) |
 | `nema17` | `motor` | Four coil leads, drawn beside its module |
 | `psu_24v` | `supply` | Motor supply, feeds the `+24V` and `MGND` rails |
 | `electrolytic` | `capacitor` | Polarized; plugs into two rails with the stripe on the negative leg |

@@ -13,6 +13,9 @@ Layout rules, chosen so that different modules' wires never cross:
   from above: EN top left, DIR bottom left, VM top right, GND bottom
   right. Modules stack top to bottom in YAML order, so they should be
   listed in the order their signals leave the header.
+- Left-column header pins never cross the board face: they leave left,
+  climb above the board, then run into the fan corridor. Right-column pins
+  leave directly toward the breadboard.
 - Each module's header wires travel as one ribbon, sorted by header
   height, from beside the header to row ``a`` beside the module. A wire
   whose pin sits above the pins of wires that leave the header before it
@@ -54,26 +57,57 @@ STEPSTICK_PINS = STEPSTICK_LEFT + STEPSTICK_RIGHT
 STEPSTICK_LABELS = {"PDN_ALT": "PDN", "VMGND": "GND", "IOGND": "GND"}
 
 # Device types this layout can draw; each takes this role unless ``breadboard.role`` overrides it.
+STEPSTICK_TYPES = {"tmc2209"}
+# Compact single-column breakouts seated on the left of the trench (pot, servo, LED, …).
+BREAKOUT_TYPES = {"potentiometer", "pot", "sg90", "led", "button"}
 DEFAULT_ROLES = {
     "tmc2209": "module",
+    "potentiometer": "module",
+    "pot": "module",
+    "sg90": "module",
+    "led": "module",
+    "button": "module",
     "nema17": "motor",
     "psu_24v": "supply",
     "electrolytic": "capacitor",
     "breadboard_rail": "rail",
 }
-MODULE_TYPES = {"tmc2209"}
+MODULE_TYPES = STEPSTICK_TYPES | BREAKOUT_TYPES
+BREAKOUT_FILL = {
+    "potentiometer": "#6B7280",
+    "pot": "#6B7280",
+    "sg90": "#EA580C",
+    "led": "#DC2626",
+    "button": "#4B5563",
+}
+BREAKOUT_GAP = 3  # empty rows between stacked breakouts
 
 RAIL_PINS = ("GND", "+3V3", "MGND", "+24V")
+# +5V is the same physical left power strip as +3V3 (Arduino vs Pi logic voltage).
+RAIL_COLUMN_ALIASES = {"+5V": "+3V3"}
 # Rail colors follow the pin-role wire colors used everywhere else.
 RAIL_ROLES = {
     "GND": PinRole.GROUND,
     "+3V3": PinRole.POWER_3V3,
+    "+5V": PinRole.POWER_5V,
     "MGND": PinRole.GROUND,
     "+24V": PinRole.POWER_EXT,
 }
 
+
+def _rail_column(rail: str) -> str:
+    """Map rail pin names onto Geometry column keys."""
+    return RAIL_COLUMN_ALIASES.get(rail, rail)
+
 MARGIN = LayoutConfig.canvas_padding
-PI_ORIGIN = (LayoutConfig.board_margin_left, 60.0)
+# Extra left/top gutter so left-column wires can run around the board
+# (never across the silkscreen) without clipping the canvas.
+LEFT_WIRE_GUTTER = 80.0
+TOP_WIRE_GUTTER = 72.0
+PI_ORIGIN = (
+    LayoutConfig.board_margin_left + LEFT_WIRE_GUTTER,
+    60.0 + TOP_WIRE_GUTTER,
+)
 PI_SCALE = 1.4
 PITCH = 22.0
 MODULE_ROWS = 12
@@ -93,6 +127,9 @@ SUPPLY_HEIGHT = 54.0
 SUPPLY_LEFT_OF_MGND = 104.0
 CAPACITOR_LABEL_WIDTH = 120.0  # right of the breadboard, room for the capacitor label
 RIBBON_SPACING = 9.0
+LEFT_ESCAPE_CLEAR = 32.0  # left of the left pin column before climbing
+TOP_BYPASS_CLEAR = 40.0  # above the board top for the cross-over lane
+TOP_BYPASS_LANE = 14.0  # vertical spacing between stacked around-board lanes
 FONT = "Arial, sans-serif"
 # Same sizes as the schematic: device names and headings 12, labels and table text 9.
 NAME_FONT_SIZE = float(RENDER_CONSTANTS.LEGEND_TITLE_FONT_SIZE.removesuffix("px"))
@@ -146,6 +183,27 @@ def stepstick_seat(device: Device, pin_name: str) -> tuple[str, int]:
     raise ValueError(f"{device.name} has no stepstick pin {pin_name}")
 
 
+def _is_stepstick(device: Device) -> bool:
+    return (device.type_id or "") in STEPSTICK_TYPES
+
+
+def _module_height(device: Device) -> int:
+    """How many breadboard rows a seated module occupies."""
+    if _is_stepstick(device):
+        return MODULE_SPAN
+    return max(len(device.pins), 2)
+
+
+def module_seat(device: Device, pin_name: str) -> tuple[str, int]:
+    """Return ``(column, row offset)`` of a module pin from the module's first row."""
+    if _is_stepstick(device):
+        return stepstick_seat(device, pin_name)
+    names = [pin.name for pin in device.pins]
+    if pin_name not in names:
+        raise ValueError(f"{device.name} has no pin {pin_name}")
+    return "b", names.index(pin_name)
+
+
 def _role(device: Device) -> str:
     if device.placement and device.placement.role:
         return device.placement.role
@@ -159,21 +217,20 @@ def _role(device: Device) -> str:
 
 
 def check_board(board: Board) -> None:
-    """Fail unless the board is a Pi-style 40-pin header: two vertical columns, odd pins left."""
-    by_number = {pin.number: pin for pin in board.pins if pin.position}
-    first, second, third = by_number.get(1), by_number.get(2), by_number.get(3)
-    standard = (
-        len(board.pins) == 40
-        and first
-        and second
-        and third
-        and first.position.y == second.position.y
-        and first.position.x == third.position.x
-        and first.position.x < second.position.x
-    )
-    if not standard or not board.svg_asset_path or not Path(board.svg_asset_path).exists():
+    """Fail unless the board has dual vertical pin columns and an SVG asset to embed.
+
+    Classic Pi 4/5 (40-pin) still works. Generic generated boards (Arduino, ESP32-C2,
+    …) are accepted when they expose at least two distinct pin X columns and a
+    renderable ``svg_asset_path`` (hand-drawn or procedurally generated).
+    """
+    positioned = [pin for pin in board.pins if pin.position]
+    xs = sorted({round(pin.position.x, 2) for pin in positioned})
+    has_columns = len(positioned) >= 4 and len(xs) >= 2
+    has_asset = bool(board.svg_asset_path) and Path(board.svg_asset_path).exists()
+    if not has_columns or not has_asset:
         raise ValueError(
-            f"Breadboard layout supports Raspberry Pi 4 and 5 style boards, not {board.name}"
+            f"Breadboard layout needs a dual-column board SVG for {board.name} "
+            f"(pins={len(positioned)}, x-columns={len(xs)}, asset={board.svg_asset_path!r})"
         )
 
 
@@ -226,32 +283,71 @@ class BreadboardRenderer:
         self.devices = {device.name: device for device in diagram.devices}
         self.modules = [device for device in diagram.devices if _role(device) == "module"]
         for module in self.modules:
-            if module.type_id not in MODULE_TYPES:
-                raise ValueError(
-                    f"Breadboard layout can only seat {', '.join(sorted(MODULE_TYPES))} "
-                    f"as a module, not {module.name}"
-                )
-        self.module_row: dict[str, int] = {}
-        for index, module in enumerate(self.modules):
-            row = module.placement.row if module.placement else None
-            self.module_row[module.name] = (
-                row if row is not None else FIRST_MODULE_ROW + index * MODULE_ROWS
+            if _is_stepstick(module):
+                continue
+            if module.type_id in BREAKOUT_TYPES or module.pins:
+                continue
+            raise ValueError(
+                f"Breadboard layout can only seat stepsticks ({', '.join(sorted(STEPSTICK_TYPES))}) "
+                f"or breakouts with pins ({', '.join(sorted(BREAKOUT_TYPES))}) as a module, "
+                f"not {module.name}"
             )
+        self.module_row: dict[str, int] = {}
+        cursor = FIRST_MODULE_ROW
+        for module in self.modules:
+            row = module.placement.row if module.placement and module.placement.row is not None else None
+            if row is None:
+                row = cursor
+            self.module_row[module.name] = row
+            gap = MODULE_ROWS if _is_stepstick(module) else _module_height(module) + BREAKOUT_GAP
+            cursor = max(cursor, row + gap)
         self._check_module_rows()
-        last = max(self.module_row.values(), default=FIRST_MODULE_ROW)
-        rows = last + MODULE_ROWS + 2
+        last = max(
+            (self.module_row[m.name] + _module_height(m) for m in self.modules),
+            default=FIRST_MODULE_ROW,
+        )
+        rows = last + 4
         board = diagram.board
-        pins = {pin.number: pin.position for pin in board.pins}
-        self.pin_pitch = (pins[3].y - pins[1].y) * PI_SCALE
+        positioned = [pin for pin in board.pins if pin.position]
+        # Median vertical spacing between consecutive pins in the same column.
+        by_x: dict[float, list[float]] = {}
+        for pin in positioned:
+            by_x.setdefault(round(pin.position.x, 2), []).append(pin.position.y)
+        pitches: list[float] = []
+        for ys in by_x.values():
+            ys_sorted = sorted(ys)
+            for a, b in zip(ys_sorted, ys_sorted[1:], strict=False):
+                gap = b - a
+                if gap > 1e-3:
+                    pitches.append(gap)
+        pitch = sorted(pitches)[len(pitches) // 2] if pitches else 12.0
+        self.pin_pitch = pitch * PI_SCALE
         header_right = (
-            PI_ORIGIN[0] + max(pin.position.x for pin in board.pins if pin.position) * PI_SCALE
+            PI_ORIGIN[0] + max(pin.position.x for pin in positioned) * PI_SCALE
+        )
+        header_left = (
+            PI_ORIGIN[0] + min(pin.position.x for pin in positioned) * PI_SCALE
         )
         self.header_right = header_right
+        self.header_left = header_left
+        self.board_top = PI_ORIGIN[1]
+        self.board_bottom = PI_ORIGIN[1] + board.height * PI_SCALE
         self.geo = Geometry(left=header_right + BOARD_TO_BREADBOARD, top=BREADBOARD_TOP, rows=rows)
         self.x_fan = header_right + FAN_OFFSET
         self.x_ribbon_end = self.geo.x["GND"] - RIBBON_END_GAP
         self.x_hop = self.geo.x["GND"] - HOP_GAP
         self.motor_x = self.geo.x["+24V"] + MOTOR_OFFSET
+        # Stable top-bypass lanes for left-column header wires (top → bottom → outer).
+        left_ys = sorted(
+            {
+                round(self._header_xy(conn.board_pin)[1], 1)
+                for conn in diagram.connections
+                if conn.board_pin
+                and self._header_xy(conn.board_pin)[0]
+                < header_right - self.pin_pitch / 4
+            }
+        )
+        self._left_bypass_lane = {y: index for index, y in enumerate(left_ys)}
 
         roles = {_role(device) for device in diagram.devices}
         content_right = self.geo.right
@@ -300,10 +396,14 @@ class BreadboardRenderer:
             if self.module_row[module.name] < MIN_MODULE_ROW:
                 raise ValueError(f"{module.name}: breadboard row must be at least {MIN_MODULE_ROW}")
         for upper, lower in zip(ordered, ordered[1:], strict=False):
-            if self.module_row[lower.name] - self.module_row[upper.name] < MODULE_SPAN:
+            min_gap = _module_height(upper) + (1 if not _is_stepstick(upper) else 0)
+            # Stepsticks keep the historical ≥8 row separation.
+            if _is_stepstick(upper) or _is_stepstick(lower):
+                min_gap = max(min_gap, MODULE_SPAN)
+            if self.module_row[lower.name] - self.module_row[upper.name] < min_gap:
                 raise ValueError(
                     f"{upper.name} and {lower.name} overlap on the breadboard; "
-                    f"their rows must be at least {MODULE_SPAN} apart"
+                    f"their rows must be at least {min_gap} apart"
                 )
 
     # Parts -----------------------------------------------------------------
@@ -406,15 +506,17 @@ class BreadboardRenderer:
                 trench - 8, geo.top + 10, 16, geo.bottom - geo.top - 20, rx=4, fill="#E7E1D6"
             )
         )
+        left_power = self._left_power_rail()
         for rail in RAIL_PINS:
             x = geo.x[rail]
+            role_key = left_power if rail == "+3V3" else rail
             c.append(
                 draw.Line(
                     x,
                     geo.y(0) - 10,
                     x,
                     geo.y(geo.rows - 1) + 10,
-                    stroke=DEFAULT_COLORS[RAIL_ROLES[rail]],
+                    stroke=DEFAULT_COLORS[RAIL_ROLES[role_key]],
                     stroke_width=3,
                     stroke_opacity=0.45,
                 )
@@ -444,11 +546,11 @@ class BreadboardRenderer:
                     transform=f"rotate(-90 {x} {y})",
                 )
             )
-        for rail in ("GND", "+3V3"):
-            x, y = geo.x[rail] + 4, geo.y(geo.rows - 1) + 32
+        for label, column in (("GND", "GND"), (left_power, "+3V3")):
+            x, y = geo.x[column] + 4, geo.y(geo.rows - 1) + 32
             c.append(
                 draw.Text(
-                    rail,
+                    label,
                     LABEL_FONT_SIZE,
                     x,
                     y,
@@ -460,6 +562,12 @@ class BreadboardRenderer:
             )
 
     def _draw_module(self, module: Device) -> None:
+        if _is_stepstick(module):
+            self._draw_stepstick(module)
+        else:
+            self._draw_breakout(module)
+
+    def _draw_stepstick(self, module: Device) -> None:
         geo, c, p = self.geo, self.canvas, self.geo.pitch
         top = self.module_row[module.name]
         x0, x1 = geo.x["b"] - 0.5 * p, geo.x["f"] + 0.5 * p
@@ -522,6 +630,60 @@ class BreadboardRenderer:
                 text_anchor="middle",
                 font_family=FONT,
                 fill="#CFC6B6",
+            )
+        )
+
+    def _draw_breakout(self, module: Device) -> None:
+        """Single-column breakout (pot / servo / LED / button) on the left of the trench."""
+        geo, c, p = self.geo, self.canvas, self.geo.pitch
+        top = self.module_row[module.name]
+        height = _module_height(module)
+        x0, x1 = geo.x["b"] - 0.5 * p, geo.x["e"] + 0.5 * p
+        y0, y1 = geo.y(top) - 0.45 * p, geo.y(top + height - 1) + 0.45 * p
+        fill = BREAKOUT_FILL.get(module.type_id or "", "#374151")
+        c.append(
+            draw.Rectangle(
+                x0, y0, x1 - x0, y1 - y0, rx=4, fill=fill, stroke="#1A140F", stroke_width=1
+            )
+        )
+        for index, pin in enumerate(module.pins):
+            y = geo.y(top + index)
+            c.append(
+                draw.Circle(geo.x["b"], y, 3.6, fill="#E6C36A", stroke="#8A6A22", stroke_width=0.6)
+            )
+            c.append(
+                draw.Text(
+                    pin.name,
+                    LABEL_FONT_SIZE,
+                    geo.x["b"] + 8,
+                    y + 4,
+                    font_family=FONT,
+                    fill="#F4EFE4",
+                )
+            )
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        c.append(
+            draw.Text(
+                module.name,
+                NAME_FONT_SIZE,
+                cx,
+                cy - 2,
+                text_anchor="middle",
+                font_family=FONT,
+                font_weight="bold",
+                fill="#FFFFFF",
+            )
+        )
+        type_label = (module.type_id or "breakout").upper()
+        c.append(
+            draw.Text(
+                type_label,
+                LABEL_FONT_SIZE,
+                cx,
+                cy + 12,
+                text_anchor="middle",
+                font_family=FONT,
+                fill="#F3F4F6",
             )
         )
 
@@ -739,7 +901,7 @@ class BreadboardRenderer:
         self.canvas.append(draw.Circle(x, y, RENDER_CONSTANTS.PIN_MARKER_INNER_RADIUS, fill=color))
 
     def _module_pin_xy(self, module: Device, pin: str) -> tuple[float, float, int]:
-        column, offset = stepstick_seat(module, pin)
+        column, offset = module_seat(module, pin)
         row = self.module_row[module.name] + offset
         return self.geo.x[column], self.geo.y(row), row
 
@@ -784,7 +946,7 @@ class BreadboardRenderer:
                     _x, _y, row = self._module_pin_xy(target, target_pin)
                     land = (
                         geo.y(self.module_row[target.name] + 7) + 2.5 * p
-                        if target_pin == "IOGND"
+                        if target_pin == "IOGND" and _is_stepstick(target)
                         else geo.y(row)
                     )
                     bundles.setdefault(target.name, []).append((connection, px, py, land, color))
@@ -840,7 +1002,7 @@ class BreadboardRenderer:
             bottom = geo.y(geo.rows - 1)
             for _supply, pin, rail, color in supply_feeds:
                 start_x = minus_x if pin.startswith("-") else plus_x
-                rail_x = geo.x[rail]
+                rail_x = geo.x[_rail_column(rail)]
                 self._wire(
                     _rounded(
                         [
@@ -867,6 +1029,14 @@ class BreadboardRenderer:
                 raise ValueError(f"{name} has both legs on {minus_rail}")
             self._draw_capacitor(self.devices[name], minus_rail, plus_rail, geo.rows - 3)
 
+    def _left_power_rail(self) -> str:
+        """Silk for the left power strip: +5V when used, otherwise +3V3."""
+        for connection in self.diagram.connections:
+            for pin in (connection.device_pin_name, connection.source_pin):
+                if pin == "+5V":
+                    return "+5V"
+        return "+3V3"
+
     def _draw_feeds(self, feeds: list[tuple[Connection, float, float, str]]) -> None:
         """Header pins that land on the left rails, from above, nested so they do not cross."""
         geo = self.geo
@@ -874,17 +1044,27 @@ class BreadboardRenderer:
         count = len(feeds)
         for index, (connection, px, py, color) in enumerate(feeds):
             rail = connection.device_pin_name or ""
-            if rail not in ("GND", "+3V3"):
-                raise ValueError(f"Header pins land on the left rails (GND, +3V3), not {rail}")
-            rail_x = geo.x[rail]
+            if rail not in ("GND", "+3V3", "+5V"):
+                raise ValueError(
+                    f"Header pins land on the left rails (GND, +3V3, +5V), not {rail}"
+                )
+            rail_x = geo.x[_rail_column(rail)]
             apex = geo.y(0) - 20 - 18 * (count - 1 - index)
             lead, sx, sy = self._fan_start(px, py, apex)
-            path = (
-                f"{lead} C {sx + 30:.1f} {sy:.1f}, "
-                f"{rail_x - 90:.1f} {apex:.1f}, {rail_x - 12:.1f} {apex:.1f} "
-                f"Q {rail_x:.1f} {apex:.1f} {rail_x:.1f} {apex + 12:.1f} "
-                f"L {rail_x:.1f} {geo.y(0):.1f}"
-            )
+            if sy < self.board_top:
+                # Already above the board via top bypass — stay high until the rail.
+                path = (
+                    f"{lead} L {rail_x - 16:.1f} {sy:.1f} "
+                    f"Q {rail_x:.1f} {sy:.1f} {rail_x:.1f} {min(sy + 12, geo.y(0)):.1f} "
+                    f"L {rail_x:.1f} {geo.y(0):.1f}"
+                )
+            else:
+                path = (
+                    f"{lead} C {sx + 30:.1f} {sy:.1f}, "
+                    f"{rail_x - 90:.1f} {apex:.1f}, {rail_x - 12:.1f} {apex:.1f} "
+                    f"Q {rail_x:.1f} {apex:.1f} {rail_x:.1f} {apex + 12:.1f} "
+                    f"L {rail_x:.1f} {geo.y(0):.1f}"
+                )
             self._wire(path, color)
             self._dot(rail_x, geo.y(0), color)
 
@@ -893,18 +1073,24 @@ class BreadboardRenderer:
     ) -> tuple[str, float, float]:
         """Leave a header pin. Returns the path so far and the point the curve starts from.
 
-        A left-column pin steps diagonally between the pads and clears the right
-        column before curving. ``over`` sends it above the right-column pin of its
-        row, used when that pin belongs to the same bundle and takes the next lane.
+        Left-column pins take the long way around the *top* of the board (left → up
+        → across above the silkscreen → into the fan corridor). Crossing the board
+        face is forbidden — it hides pin labels. Right-column pins leave directly.
+        ``over`` is kept for call-site compatibility but unused for left pins.
         """
+        del toward_y, over  # destination handled by the caller after this stub
         if px < self.header_right - self.pin_pitch / 4:
-            step = self.pin_pitch / 2
-            dy = -step if over or toward_y < py else step if toward_y > py else 0.0
-            clear_x = self.header_right + step
+            lane = self._left_bypass_lane.get(round(py, 1), 0)
+            escape_x = self.header_left - LEFT_ESCAPE_CLEAR - lane * RIBBON_SPACING
+            bypass_y = self.board_top - TOP_BYPASS_CLEAR - lane * TOP_BYPASS_LANE
+            clear_x = self.header_right + self.pin_pitch / 2
             path = (
-                f"M {px:.1f} {py:.1f} L {px + step:.1f} {py + dy:.1f} L {clear_x:.1f} {py + dy:.1f}"
+                f"M {px:.1f} {py:.1f} "
+                f"L {escape_x:.1f} {py:.1f} "
+                f"L {escape_x:.1f} {bypass_y:.1f} "
+                f"L {clear_x:.1f} {bypass_y:.1f}"
             )
-            return path, clear_x, py + dy
+            return path, clear_x, bypass_y
         return f"M {px:.1f} {py:.1f}", px, py
 
     def _draw_bundle(
@@ -938,15 +1124,25 @@ class BreadboardRenderer:
             lane = center + (index - (len(routed) - 1) / 2) * RIBBON_SPACING
             shares_row = any(abs(other[2] - py) < 1 and other[1] > px for other in wires)
             lead, sx, sy = self._fan_start(px, py, lane, over=shares_row)
-            head = (
-                f"{lead} C {sx + 18:.1f} {sy:.1f}, "
-                f"{self.x_fan - 30:.1f} {lane:.1f}, {self.x_fan:.1f} {lane:.1f} "
-                f"C {self.x_fan + k:.1f} {lane:.1f}, "
-                f"{self.x_ribbon_end - k:.1f} {land:.1f}, "
-                f"{self.x_ribbon_end:.1f} {land:.1f}"
-            )
+            if sy < self.board_top:
+                # Top-bypass: run past the board at bypass height, then drop in the
+                # fan corridor only — never cubic back down through the silkscreen.
+                head = (
+                    f"{lead} L {self.x_fan:.1f} {sy:.1f} "
+                    f"C {self.x_fan + k:.1f} {sy:.1f}, "
+                    f"{self.x_ribbon_end - k:.1f} {land:.1f}, "
+                    f"{self.x_ribbon_end:.1f} {land:.1f}"
+                )
+            else:
+                head = (
+                    f"{lead} C {sx + 18:.1f} {sy:.1f}, "
+                    f"{self.x_fan - 30:.1f} {lane:.1f}, {self.x_fan:.1f} {lane:.1f} "
+                    f"C {self.x_fan + k:.1f} {lane:.1f}, "
+                    f"{self.x_ribbon_end - k:.1f} {land:.1f}, "
+                    f"{self.x_ribbon_end:.1f} {land:.1f}"
+                )
             pin = connection.device_pin_name or ""
-            if pin == "IOGND":
+            if pin == "IOGND" and _is_stepstick(module):
                 # Bottom-right pin: run under the module and up into its row.
                 end_x, end_y, _row = self._module_pin_xy(module, pin)
                 end_x = geo.x["i"]
@@ -967,7 +1163,24 @@ class BreadboardRenderer:
         geo, p = self.geo, self.geo.pitch
         top = self.module_row[module.name]
         _x, y, _row = self._module_pin_xy(module, pin)
-        if pin in ("MS1", "MS2"):
+        if not _is_stepstick(module):
+            power = pin.upper() in ("VCC", "+", "5V", "3V3", "+3V3", "VIN", "VDD")
+            ground = pin.upper() in ("GND", "-", "GROUND")
+            if power:
+                if rail not in ("+3V3", "+5V"):
+                    raise ValueError(
+                        f"{module.name}.{pin} should tie to the +3V3 or +5V rail"
+                    )
+                points = [(geo.x[_rail_column(rail)], y), (geo.x["a"], y)]
+                end = points[-1]
+            elif ground:
+                if rail != "GND":
+                    raise ValueError(f"{module.name}.{pin} should tie to the GND rail")
+                points = [(geo.x["GND"], y), (geo.x["a"], y)]
+                end = points[-1]
+            else:
+                raise ValueError(f"Breadboard layout has no rail stub for {module.name}.{pin}")
+        elif pin in ("MS1", "MS2"):
             if rail != "+3V3":
                 raise ValueError(f"{module.name}.{pin} should tie to the +3V3 rail")
             points = [(geo.x["+3V3"], y), (geo.x["a"], y)]
@@ -989,7 +1202,7 @@ class BreadboardRenderer:
                 )
             if pin == "VM" and rail != "+24V":
                 raise ValueError(f"{module.name}.VM should tie to the +24V rail")
-            points = [(geo.x["j"], y), (geo.x[rail], y)]
+            points = [(geo.x["j"], y), (geo.x[_rail_column(rail)], y)]
             end = points[0]
         else:
             raise ValueError(f"Breadboard layout has no rail stub for {module.name}.{pin}")
@@ -1027,5 +1240,5 @@ class BreadboardRenderer:
 
 
 def module_row_offset(device: Device, pin_name: str) -> int:
-    """Row of a stepstick pin, counted from the module's first row."""
-    return stepstick_seat(device, pin_name)[1]
+    """Row of a module pin, counted from the module's first row."""
+    return module_seat(device, pin_name)[1]

@@ -1,0 +1,11 @@
+title: "Arduino Mega — LED on D13"
+board: arduino_mega_2560
+layout: schematic
+show_legend: true
+devices:
+  - type: led
+    name: LED1
+    color: red
+connections:
+  - { board_pin: 29, device: LED1, device_pin: "+", color: "#E2B000" }
+  - { board_pin: 6, device: LED1, device_pin: "-", color: "#1A1A1A" }

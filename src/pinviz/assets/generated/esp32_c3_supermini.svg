@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140.00" height="240.00" viewBox="0 0 140.00 240.00">
+<rect x="0" y="0" width="140.00" height="240.00" rx="10" ry="10" fill="#1B4F72" stroke="#0E2F44" stroke-width="2"/>
+<rect x="52.00" y="0" width="36" height="8" rx="2" fill="#CFCFCF" stroke="#666" stroke-width="0.8"/>
+<text x="70.00" y="120.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">ESP32-C3 SuperMini</text>
+<text x="70.00" y="136.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#D6EAF8">generic pinout</text>
+<circle cx="14.00" cy="71.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="74.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">5V</text>
+<circle cx="14.00" cy="85.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="88.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="14.00" cy="99.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="102.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">3V3</text>
+<circle cx="14.00" cy="113.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="116.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO4</text>
+<circle cx="14.00" cy="127.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="130.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO3</text>
+<circle cx="14.00" cy="141.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="144.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO2</text>
+<circle cx="14.00" cy="155.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="158.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO1</text>
+<circle cx="14.00" cy="169.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="172.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO0</text>
+<circle cx="126.00" cy="71.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="74.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO5</text>
+<circle cx="126.00" cy="85.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="88.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO6</text>
+<circle cx="126.00" cy="99.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="102.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO7</text>
+<circle cx="126.00" cy="113.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="116.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO8</text>
+<circle cx="126.00" cy="127.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="130.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO9</text>
+<circle cx="126.00" cy="141.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="144.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO10</text>
+<circle cx="126.00" cy="155.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="158.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO20</text>
+<circle cx="126.00" cy="169.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="118.00" y="172.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GPIO21</text>
+</svg>

@@ -1,0 +1,11 @@
+title: "RP2040-Zero — LED on GP0"
+board: rp2040_zero
+layout: schematic
+show_legend: true
+devices:
+  - type: led
+    name: LED1
+    color: blue
+connections:
+  - { board_pin: 23, device: LED1, device_pin: "+", color: "#3B82F6" }
+  - { board_pin: 2, device: LED1, device_pin: "-", color: "#1A1A1A" }

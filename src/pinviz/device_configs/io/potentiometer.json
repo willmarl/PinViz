@@ -1,0 +1,21 @@
+{
+  "id": "potentiometer",
+  "name": "Potentiometer",
+  "category": "io",
+  "description": "Three-terminal potentiometer / trimmer (VCC, wiper, GND)",
+  "aliases": ["pot", "trimmer", "variable_resistor"],
+  "pins": [
+    { "name": "VCC", "role": "5V" },
+    { "name": "WIPER", "role": "GPIO" },
+    { "name": "GND", "role": "GND" }
+  ],
+  "layout": {
+    "pin_spacing": 10.0,
+    "start_y": 10.0
+  },
+  "display": {
+    "width": 70.0,
+    "height": 50.0
+  },
+  "notes": "Typical wiring: VCC to 5V/3V3, GND to ground, WIPER to an analog input. Pin order on the body varies by part — match silkscreen / datasheet."
+}

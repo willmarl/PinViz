@@ -1,0 +1,37 @@
+{
+  "name": "ESP32-C2-DevKitM-1",
+  "render_mode": "generated",
+  "show_pin_names": true,
+  "width": 160,
+  "height": 260,
+  "header_offset": { "x": 0, "y": 0 },
+  "aliases": ["esp32_c2", "esp32c2", "c2", "esp32_c2_devkit", "esp32c2_devkitm1"],
+  "layout": {
+    "mode": "sides",
+    "pin_spacing": 14,
+    "margin": 16
+  },
+  "pins": [
+    { "physical_pin": 1, "name": "5V", "role": "5V", "gpio_bcm": null, "header": "left" },
+    { "physical_pin": 2, "name": "GND", "role": "GND", "gpio_bcm": null, "header": "left" },
+    { "physical_pin": 3, "name": "3V3", "role": "3V3", "gpio_bcm": null, "header": "left" },
+    { "physical_pin": 4, "name": "NC", "role": "GPIO", "gpio_bcm": null, "header": "left" },
+    { "physical_pin": 5, "name": "GPIO0", "role": "GPIO", "gpio_bcm": 0, "header": "left" },
+    { "physical_pin": 6, "name": "GPIO1", "role": "GPIO", "gpio_bcm": 1, "header": "left" },
+    { "physical_pin": 7, "name": "GPIO2", "role": "GPIO", "gpio_bcm": 2, "header": "left" },
+    { "physical_pin": 8, "name": "GPIO3", "role": "GPIO", "gpio_bcm": 3, "header": "left" },
+    { "physical_pin": 9, "name": "GPIO4", "role": "GPIO", "gpio_bcm": 4, "header": "left" },
+    { "physical_pin": 10, "name": "GPIO5", "role": "GPIO", "gpio_bcm": 5, "header": "left" },
+
+    { "physical_pin": 11, "name": "GPIO18", "role": "GPIO", "gpio_bcm": 18, "header": "right" },
+    { "physical_pin": 12, "name": "GPIO19", "role": "GPIO", "gpio_bcm": 19, "header": "right" },
+    { "physical_pin": 13, "name": "GPIO10", "role": "GPIO", "gpio_bcm": 10, "header": "right" },
+    { "physical_pin": 14, "name": "GPIO6", "role": "GPIO", "gpio_bcm": 6, "header": "right" },
+    { "physical_pin": 15, "name": "GPIO7", "role": "GPIO", "gpio_bcm": 7, "header": "right" },
+    { "physical_pin": 16, "name": "GPIO8", "role": "GPIO", "gpio_bcm": 8, "header": "right" },
+    { "physical_pin": 17, "name": "GPIO9", "role": "GPIO", "gpio_bcm": 9, "header": "right" },
+    { "physical_pin": 18, "name": "TX", "role": "UART_TX", "gpio_bcm": null, "header": "right" },
+    { "physical_pin": 19, "name": "RX", "role": "UART_RX", "gpio_bcm": null, "header": "right" },
+    { "physical_pin": 20, "name": "GND", "role": "GND", "gpio_bcm": null, "header": "right" }
+  ]
+}

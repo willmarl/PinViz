@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150.00" height="220.00" viewBox="0 0 150.00 220.00">
+<rect x="0" y="0" width="150.00" height="220.00" rx="10" ry="10" fill="#1B4F72" stroke="#0E2F44" stroke-width="2"/>
+<rect x="57.00" y="0" width="36" height="8" rx="2" fill="#CFCFCF" stroke="#666" stroke-width="0.8"/>
+<text x="75.00" y="110.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">Waveshare RP2040-Zero</text>
+<text x="75.00" y="126.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#D6EAF8">generic pinout</text>
+<circle cx="14.00" cy="58.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="61.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">5V</text>
+<circle cx="14.00" cy="71.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="74.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="14.00" cy="84.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="87.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">3V3</text>
+<circle cx="14.00" cy="97.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="100.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP29</text>
+<circle cx="14.00" cy="110.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="113.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP28</text>
+<circle cx="14.00" cy="123.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="126.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP27</text>
+<circle cx="14.00" cy="136.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="139.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP26</text>
+<circle cx="14.00" cy="149.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="152.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP15</text>
+<circle cx="14.00" cy="162.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="165.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP14</text>
+<circle cx="49.00" cy="206.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="49.00" y="198.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP13</text>
+<circle cx="62.00" cy="206.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="62.00" y="198.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP12</text>
+<circle cx="75.00" cy="206.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="75.00" y="198.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP11</text>
+<circle cx="88.00" cy="206.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="88.00" y="198.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP10</text>
+<circle cx="101.00" cy="206.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="101.00" y="198.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP9</text>
+<circle cx="136.00" cy="58.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="61.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP8</text>
+<circle cx="136.00" cy="71.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="74.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP7</text>
+<circle cx="136.00" cy="84.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="87.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP6</text>
+<circle cx="136.00" cy="97.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="100.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP5</text>
+<circle cx="136.00" cy="110.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="113.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP4</text>
+<circle cx="136.00" cy="123.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="126.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP3</text>
+<circle cx="136.00" cy="136.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="139.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP2</text>
+<circle cx="136.00" cy="149.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="152.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP1</text>
+<circle cx="136.00" cy="162.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="128.00" y="165.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GP0</text>
+</svg>

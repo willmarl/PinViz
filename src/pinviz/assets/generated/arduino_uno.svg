@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220.00" height="280.00" viewBox="0 0 220.00 280.00">
+<rect x="0" y="0" width="220.00" height="280.00" rx="10" ry="10" fill="#1B4F72" stroke="#0E2F44" stroke-width="2"/>
+<rect x="92.00" y="0" width="36" height="8" rx="2" fill="#CFCFCF" stroke="#666" stroke-width="0.8"/>
+<text x="110.00" y="140.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">Arduino Uno R3</text>
+<text x="110.00" y="156.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#D6EAF8">generic pinout</text>
+<circle cx="16.00" cy="56.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="59.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">IOREF</text>
+<circle cx="16.00" cy="70.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="73.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">RESET</text>
+<circle cx="16.00" cy="84.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="87.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">3V3</text>
+<circle cx="16.00" cy="98.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="101.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">5V</text>
+<circle cx="16.00" cy="112.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="115.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="16.00" cy="126.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="129.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="16.00" cy="140.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="143.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">VIN</text>
+<circle cx="16.00" cy="154.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="157.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">A0</text>
+<circle cx="16.00" cy="168.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="171.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">A1</text>
+<circle cx="16.00" cy="182.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="185.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">A2</text>
+<circle cx="16.00" cy="196.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="199.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">A3</text>
+<circle cx="16.00" cy="210.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="213.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">A4</text>
+<circle cx="16.00" cy="224.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="24.00" y="227.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">A5</text>
+<circle cx="204.00" cy="49.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="52.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D13</text>
+<circle cx="204.00" cy="63.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="66.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D12</text>
+<circle cx="204.00" cy="77.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="80.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D11</text>
+<circle cx="204.00" cy="91.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="94.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D10</text>
+<circle cx="204.00" cy="105.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="108.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D9</text>
+<circle cx="204.00" cy="119.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="122.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D8</text>
+<circle cx="204.00" cy="133.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="136.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D7</text>
+<circle cx="204.00" cy="147.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="150.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D6</text>
+<circle cx="204.00" cy="161.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="164.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D5</text>
+<circle cx="204.00" cy="175.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="178.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D4</text>
+<circle cx="204.00" cy="189.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="192.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D3</text>
+<circle cx="204.00" cy="203.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="206.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D2</text>
+<circle cx="204.00" cy="217.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="220.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D1</text>
+<circle cx="204.00" cy="231.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="196.00" y="234.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">D0</text>
+</svg>

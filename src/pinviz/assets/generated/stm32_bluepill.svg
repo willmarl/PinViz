@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160.00" height="320.00" viewBox="0 0 160.00 320.00">
+<rect x="0" y="0" width="160.00" height="320.00" rx="10" ry="10" fill="#1B4F72" stroke="#0E2F44" stroke-width="2"/>
+<rect x="62.00" y="0" width="36" height="8" rx="2" fill="#CFCFCF" stroke="#666" stroke-width="0.8"/>
+<text x="80.00" y="160.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">STM32F103C8T6 Blue Pill</text>
+<text x="80.00" y="176.00" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#D6EAF8">generic pinout</text>
+<circle cx="14.00" cy="46.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="49.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB12</text>
+<circle cx="14.00" cy="58.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="61.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB13</text>
+<circle cx="14.00" cy="70.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="73.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB14</text>
+<circle cx="14.00" cy="82.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="85.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB15</text>
+<circle cx="14.00" cy="94.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="97.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA8</text>
+<circle cx="14.00" cy="106.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="109.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA9</text>
+<circle cx="14.00" cy="118.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="121.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA10</text>
+<circle cx="14.00" cy="130.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="133.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA11</text>
+<circle cx="14.00" cy="142.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="145.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA12</text>
+<circle cx="14.00" cy="154.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="157.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA15</text>
+<circle cx="14.00" cy="166.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="169.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB3</text>
+<circle cx="14.00" cy="178.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="181.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB4</text>
+<circle cx="14.00" cy="190.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="193.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB5</text>
+<circle cx="14.00" cy="202.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="205.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB6</text>
+<circle cx="14.00" cy="214.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="217.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB7</text>
+<circle cx="14.00" cy="226.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="229.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB8</text>
+<circle cx="14.00" cy="238.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="241.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB9</text>
+<circle cx="14.00" cy="250.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="253.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">5V</text>
+<circle cx="14.00" cy="262.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="265.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="14.00" cy="274.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="22.00" y="277.00" text-anchor="start" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">3V3</text>
+<circle cx="146.00" cy="46.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="49.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB11</text>
+<circle cx="146.00" cy="58.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="61.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB10</text>
+<circle cx="146.00" cy="70.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="73.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB1</text>
+<circle cx="146.00" cy="82.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="85.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PB0</text>
+<circle cx="146.00" cy="94.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="97.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA7</text>
+<circle cx="146.00" cy="106.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="109.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA6</text>
+<circle cx="146.00" cy="118.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="121.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA5</text>
+<circle cx="146.00" cy="130.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="133.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA4</text>
+<circle cx="146.00" cy="142.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="145.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA3</text>
+<circle cx="146.00" cy="154.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="157.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA2</text>
+<circle cx="146.00" cy="166.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="169.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA1</text>
+<circle cx="146.00" cy="178.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="181.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PA0</text>
+<circle cx="146.00" cy="190.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="193.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PC15</text>
+<circle cx="146.00" cy="202.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="205.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PC14</text>
+<circle cx="146.00" cy="214.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="217.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">PC13</text>
+<circle cx="146.00" cy="226.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="229.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">VBAT</text>
+<circle cx="146.00" cy="238.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="241.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">3V3</text>
+<circle cx="146.00" cy="250.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="253.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="146.00" cy="262.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="265.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">GND</text>
+<circle cx="146.00" cy="274.00" r="4.2" fill="#F4D03F" stroke="#7D6608" stroke-width="0.8"/>
+<text x="138.00" y="277.00" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="#FFFFFF">5V</text>
+</svg>

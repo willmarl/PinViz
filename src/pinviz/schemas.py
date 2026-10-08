@@ -37,7 +37,7 @@ from .color_utils import resolve_color
 if TYPE_CHECKING:
     from .model import Connection
 
-# Valid board names and aliases
+# Built-in board names and aliases (JSON board_configs aliases are discovered too).
 VALID_BOARD_NAMES = {
     "raspberry_pi_5",
     "raspberry_pi_4",
@@ -69,6 +69,31 @@ VALID_BOARD_NAMES = {
     "nodemcu",
 }
 
+
+def get_valid_board_names() -> set[str]:
+    """All board names/aliases, including auto-discovered board_configs.
+
+    Scans ``board_configs/*.json`` directly (no import of ``boards``) so this
+    stays safe during package import when ``boards`` already imports schemas.
+    """
+    import json
+    from pathlib import Path
+
+    names = set(VALID_BOARD_NAMES)
+    config_dir = Path(__file__).parent / "board_configs"
+    if not config_dir.is_dir():
+        return names
+    for path in config_dir.glob("*.json"):
+        names.add(path.stem.lower())
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for alias in data.get("aliases") or []:
+            if isinstance(alias, str) and alias.strip():
+                names.add(alias.strip().lower())
+    return names
+
 # Valid device types from the device registry
 VALID_DEVICE_TYPES = {
     "ads1115",
@@ -98,6 +123,8 @@ VALID_DEVICE_TYPES = {
     "mpu9250",
     "nrf24l01",
     "pir",
+    "potentiometer",
+    "pot",  # Alias for potentiometer
     "rc522",
     "relay_auto",
     "relay_module",
@@ -690,11 +717,12 @@ class DiagramConfigSchema(BaseModel):
     @field_validator("board")
     @classmethod
     def validate_board_name(cls, v: str) -> str:
-        """Validate that board name is supported."""
+        """Validate that board name is supported (built-ins + discovered configs)."""
         board_lower = v.lower()
-        if board_lower not in VALID_BOARD_NAMES:
+        valid = get_valid_board_names()
+        if board_lower not in valid:
             raise ValueError(
-                f"Invalid board name '{v}'. Must be one of: {', '.join(sorted(VALID_BOARD_NAMES))}"
+                f"Invalid board name '{v}'. Must be one of: {', '.join(sorted(valid))}"
             )
         return board_lower
 
@@ -809,14 +837,14 @@ class BoardPinConfigSchema(BaseModel):
         name: Pin name/label (e.g., "GPIO2", "3V3", "GND")
         role: Pin function/role (e.g., "GPIO", "I2C_SDA", "POWER_3V3")
         gpio_bcm: BCM GPIO number (null for power/ground pins)
-        header: Header side for dual-header boards ("top" or "bottom", optional)
+        header: Header side — "top"/"bottom" (Pico), or "left"/"right"/"top"/"bottom" (generic)
     """
 
     physical_pin: Annotated[int, Field(ge=1, description="Physical pin number")]
     name: Annotated[str, Field(min_length=1, max_length=50, description="Pin name")]
     role: Annotated[str, Field(description="Pin role/function")]
     gpio_bcm: int | None = None
-    header: str | None = None  # "top" or "bottom" for dual-header boards
+    header: str | None = None  # top/bottom (Pico) or left/right/top/bottom (generic)
 
     model_config = ConfigDict(extra="forbid")
 
@@ -834,9 +862,11 @@ class BoardPinConfigSchema(BaseModel):
     @field_validator("header")
     @classmethod
     def validate_header(cls, v: str | None) -> str | None:
-        """Validate header side for dual-header boards."""
-        if v is not None and v not in {"top", "bottom"}:
-            raise ValueError(f"Invalid header side '{v}'. Must be 'top' or 'bottom'")
+        """Validate header side for dual-header / generic multi-side boards."""
+        if v is not None and v not in {"top", "bottom", "left", "right"}:
+            raise ValueError(
+                f"Invalid header side '{v}'. Must be 'left', 'right', 'top', or 'bottom'"
+            )
         return v
 
 
@@ -846,11 +876,12 @@ class BoardLayoutConfigSchema(BaseModel):
     Defines the physical layout parameters for positioning GPIO header pins
     in the SVG rendering. These values should align with the board's SVG asset.
 
-    Supports two layout modes:
+    Supports layout modes:
     1. Single-header (Raspberry Pi): Vertical layout with left_col_x, right_col_x,
        start_y, row_spacing
     2. Dual-header (Pico): Horizontal layout with top_header and bottom_header
-       Each header is a single row of pins running left-to-right
+    3. Sides / generic: ``mode: "sides"`` (+ optional pin_spacing/margin/width/height)
+       with each pin's ``header`` set to left/right/top/bottom — SVG artwork is generated
 
     Attributes:
         left_col_x: X-coordinate for left column (single-header vertical layout only)
@@ -861,6 +892,7 @@ class BoardLayoutConfigSchema(BaseModel):
                     Dict with: start_x, pin_spacing, y
         bottom_header: Layout for bottom edge header (dual-header horizontal layout)
                        Dict with: start_x, pin_spacing, y
+        mode: Optional ``"sides"`` for generic multi-side boards
     """
 
     # Single-header vertical layout (Raspberry Pi)
@@ -883,11 +915,20 @@ class BoardLayoutConfigSchema(BaseModel):
     top_header: dict | None = None
     bottom_header: dict | None = None
 
+    # Generic multi-side controller boards (Arduino, ESP32-C2, …)
+    mode: str | None = None
+    pin_spacing: float | None = None
+    margin: float | None = None
+    width: float | None = None
+    height: float | None = None
+    left_header: dict | None = None
+    right_header: dict | None = None
+
     model_config = ConfigDict(extra="allow")  # Allow extra fields for flexibility
 
     @model_validator(mode="after")
     def validate_layout_mode(self):
-        """Ensure either single-header or dual-header layout is defined."""
+        """Ensure a known layout mode is defined."""
         has_single_header = all(
             [
                 self.left_col_x is not None,
@@ -897,12 +938,19 @@ class BoardLayoutConfigSchema(BaseModel):
             ]
         )
         has_dual_header = self.top_header is not None and self.bottom_header is not None
+        has_sides = self.mode == "sides" or any(
+            [
+                self.left_header is not None,
+                self.right_header is not None,
+            ]
+        )
 
-        if not has_single_header and not has_dual_header:
+        if not has_single_header and not has_dual_header and not has_sides:
             raise ValueError(
-                "Layout must define either single-header "
-                "(left_col_x, right_col_x, start_y, row_spacing) "
-                "or dual-header (top_header, bottom_header) configuration"
+                "Layout must define single-header "
+                "(left_col_x, right_col_x, start_y, row_spacing), "
+                "dual-header (top_header, bottom_header), "
+                "or sides mode (mode='sides' / left_header / right_header)"
             )
 
         if has_single_header and self.right_col_x <= self.left_col_x:
@@ -955,9 +1003,13 @@ class BoardConfigSchema(BaseModel):
 
     name: Annotated[str, Field(min_length=1, max_length=100, description="Board name")]
     svg_asset: Annotated[
-        str,
-        Field(min_length=1, max_length=100, description="SVG asset filename"),
-    ]
+        str | None,
+        Field(
+            default=None,
+            max_length=100,
+            description="SVG asset filename (optional when artwork is generated)",
+        ),
+    ] = None
     width: Annotated[float, Field(gt=0, description="Board width (legacy)")]
     height: Annotated[float, Field(gt=0, description="Board height (legacy)")]
     header_offset: PointSchema
@@ -966,9 +1018,13 @@ class BoardConfigSchema(BaseModel):
         str,
         Field(
             default="programmatic",
-            description="Render mode: 'programmatic' or 'svg_asset'",
+            description="Render mode: 'programmatic', 'svg_asset', or 'generated'",
         ),
     ] = "programmatic"
+    aliases: list[str] = Field(
+        default_factory=list,
+        description="Alternate board names for selection",
+    )
     svg_scale: Annotated[
         float,
         Field(default=1.0, gt=0, le=10, description="Scale factor for SVG asset rendering"),

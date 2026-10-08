@@ -1,0 +1,16 @@
+title: "Mega — potentiometer + SG90"
+board: arduino_mega_2560
+layout: schematic
+show_legend: true
+devices:
+  - type: potentiometer
+    name: Pot
+  - type: sg90
+    name: Servo
+connections:
+  - { board_pin: 5, device: Pot, device_pin: VCC, color: "#D31212" }
+  - { board_pin: 9, device: Pot, device_pin: WIPER, color: "#E2B000" }
+  - { board_pin: 6, device: Pot, device_pin: GND, color: "#1A1A1A" }
+  - { board_pin: 5, device: Servo, device_pin: VCC, color: "#D31212" }
+  - { board_pin: 6, device: Servo, device_pin: GND, color: "#1A1A1A" }
+  - { board_pin: 33, device: Servo, device_pin: Signal, color: "#1F9D55" }

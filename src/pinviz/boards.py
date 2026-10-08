@@ -201,14 +201,40 @@ def load_board_from_config(config_name: str) -> Board:
         raise ValueError(f"Invalid board configuration in {config_path}: {e}") from e
 
     # Calculate pin positions based on layout parameters
-    # Check if this is a dual-header board (like Pico) or single-header (like Pi 5)
     layout_dict = config.layout if isinstance(config.layout, dict) else config.layout.__dict__
     is_dual_header = (
-        layout_dict.get("top_header") is not None and layout_dict.get("bottom_header") is not None
+        layout_dict.get("top_header") is not None
+        and layout_dict.get("bottom_header") is not None
+        and layout_dict.get("mode") != "sides"
+        and not layout_dict.get("left_header")
+        and not layout_dict.get("right_header")
+        # Pico-style: top/bottom only, pins use header top/bottom (not left/right)
+        and all(
+            getattr(p, "header", None) in (None, "top", "bottom") for p in config.pins
+        )
+    )
+    from .generic_board import (
+        calculate_sides_positions,
+        ensure_generated_svg,
+        layout_is_sides,
     )
 
-    # Use appropriate position calculation method based on board type
-    if is_dual_header:
+    is_sides = layout_is_sides(layout_dict) or any(
+        getattr(p, "header", None) in ("left", "right") for p in config.pins
+    )
+
+    board_width = config.width
+    board_height = config.height
+    if is_sides:
+        board_width, board_height, pin_positions = calculate_sides_positions(
+            {
+                **layout_dict,
+                "width": layout_dict.get("width") or config.width,
+                "height": layout_dict.get("height") or config.height,
+            },
+            config.pins,
+        )
+    elif is_dual_header:
         pin_positions = _calculate_dual_header_positions(layout_dict, config.pins)
     else:
         pin_positions = _calculate_single_header_positions(layout_dict, config.pins)
@@ -237,9 +263,50 @@ def load_board_from_config(config_name: str) -> Board:
     # Sort pins by physical pin number for consistency
     pins.sort(key=lambda p: p.number)
 
+    render_mode = getattr(config, "render_mode", "programmatic")
+    generate_art = (
+        render_mode == "generated"
+        or is_sides
+        or not config.svg_asset
+        or config.svg_asset in {"generated", "generated.svg", "auto"}
+    )
+
+    if generate_art:
+        svg_path = ensure_generated_svg(
+            config_name,
+            name=config.name,
+            width=board_width,
+            height=board_height,
+            pins=config.pins,
+            positions=pin_positions,
+        )
+        # Breadboard embeds the SVG asset; schematic can use BoardRenderer too.
+        from .board_renderer import BoardStyle
+
+        scale = BoardStyle().scale_factor
+        xs = [p.position.x for p in pins if p.position]
+        ys = [p.position.y for p in pins if p.position]
+        board_layout = BoardLayout(
+            width_mm=board_width / scale,
+            height_mm=board_height / scale,
+            header_x_mm=(min(xs) if xs else 0) / scale,
+            header_y_mm=(min(ys) if ys else 0) / scale,
+            header_width_mm=((max(xs) - min(xs)) if len(xs) > 1 else 5.08) / scale,
+            header_height_mm=((max(ys) - min(ys)) if len(ys) > 1 else 50.8) / scale,
+        )
+        return Board(
+            name=config.name,
+            pins=pins,
+            svg_asset_path=str(svg_path),
+            width=board_width,
+            height=board_height,
+            header_offset=Point(config.header_offset.x, config.header_offset.y),
+            layout=board_layout,
+            show_pin_names=getattr(config, "show_pin_names", True),
+        )
+
     # Check render mode: svg_asset mode skips BoardLayout so the legacy SVG
     # embedding path is used (board.layout == None triggers SVG asset rendering).
-    render_mode = getattr(config, "render_mode", "programmatic")
     if render_mode == "svg_asset":
         svg_scale = getattr(config, "svg_scale", 1.0)
         # Scale pin positions to match SVG scaling
@@ -265,7 +332,7 @@ def load_board_from_config(config_name: str) -> Board:
     from .board_renderer import BoardStyle
 
     scale = BoardStyle().scale_factor
-    num_rows = len(config.pins) // 2  # pins per side
+    num_rows = max(len(config.pins) // 2, 1)
 
     # Header position and size from layout parameters
     if is_dual_header:
@@ -557,9 +624,8 @@ def get_available_boards() -> list[dict[str, str | list[str]]]:
         This function dynamically discovers boards from the board_configs
         directory, so it will automatically include any newly added boards.
     """
-    # Map of board config names to their aliases
-    # This could be extracted to a separate config file if needed
-    board_aliases = {
+    # Built-in aliases (JSON ``aliases`` field is merged in below).
+    board_aliases: dict[str, list[str]] = {
         "raspberry_pi_5": ["rpi5", "rpi"],
         "raspberry_pi_4": ["rpi4", "pi4"],
         "raspberry_pi_pico": ["pico"],
@@ -578,19 +644,24 @@ def get_available_boards() -> list[dict[str, str | list[str]]]:
         for config_file in sorted(config_dir.glob("*.json")):
             board_name = config_file.stem  # e.g., "raspberry_pi_5"
 
-            # Load the config to get the display name
+            # Load the config to get the display name + optional aliases
             try:
                 with open(config_file) as f:
                     config_dict = json.load(f)
                 display_name = config_dict.get("name", board_name)
+                json_aliases = [
+                    a for a in (config_dict.get("aliases") or []) if isinstance(a, str)
+                ]
             except (json.JSONDecodeError, OSError):
                 display_name = board_name
+                json_aliases = []
 
+            aliases = sorted(set(board_aliases.get(board_name, []) + json_aliases))
             boards_list.append(
                 {
                     "name": board_name,
                     "display_name": display_name,
-                    "aliases": board_aliases.get(board_name, []),
+                    "aliases": aliases,
                 }
             )
 

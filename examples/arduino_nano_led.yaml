@@ -1,0 +1,11 @@
+title: "Arduino Nano — LED on D13"
+board: arduino_nano
+layout: schematic
+show_legend: true
+devices:
+  - type: led
+    name: LED1
+    color: green
+connections:
+  - { board_pin: 30, device: LED1, device_pin: "+", color: "#22C55E" }
+  - { board_pin: 4, device: LED1, device_pin: "-", color: "#1A1A1A" }

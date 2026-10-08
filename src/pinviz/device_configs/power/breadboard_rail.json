@@ -2,7 +2,7 @@
   "id": "breadboard_rail",
   "name": "Breadboard rails",
   "category": "power",
-  "description": "The four distribution rails of an upright solderless breadboard: logic ground and 3.3V on the left, motor ground and motor supply on the right.",
+  "description": "The four distribution rails of an upright solderless breadboard: logic ground and logic power (+3V3 or +5V) on the left, motor ground and motor supply on the right.",
   "datasheet_url": "https://en.wikipedia.org/wiki/Breadboard",
   "pins": [
     {
@@ -16,6 +16,11 @@
       "side": "left"
     },
     {
+      "name": "+5V",
+      "role": "5V",
+      "side": "left"
+    },
+    {
       "name": "MGND",
       "role": "GND",
       "side": "right"
@@ -26,5 +31,5 @@
       "side": "right"
     }
   ],
-  "notes": "Used by layout: breadboard. The renderer draws these as the breadboard power strips instead of a device box. The renderer ties GND to MGND whenever MGND is used. +24V is the external motor supply (EXT_POWER role)."
+  "notes": "Used by layout: breadboard. The renderer draws these as the breadboard power strips instead of a device box. +3V3 and +5V share the left power strip (same column); use +5V for Arduino-class logic, +3V3 for Pi/ESP. The renderer ties GND to MGND whenever MGND is used. +24V is the external motor supply (EXT_POWER role)."
 }
